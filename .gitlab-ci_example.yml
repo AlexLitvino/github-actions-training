@@ -1,0 +1,81 @@
+variables:
+  PYTEST_OPTIONAL_PARAMETERS:
+    value: "-r A"
+    description: "pytest options passed to elaborate test run **Optional"
+  ENVIRONMENT_TYPE:
+    value: "test"
+    options:
+      - "test"
+      - "stage"
+      - "prod"
+    description: "Select server"
+  TEST_PACKAGE:
+    value: "*"
+    description: "Test package to run"
+
+default:
+  image: python:3.9
+  cache:
+    key: venv-cache-${CI_COMMIT_REF_SLUG}
+    paths:
+      - venv/
+      - API_test.egg-info/
+
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - test
+
+.activate_venv: &activate_venv
+    - source venv/bin/activate
+    - pip list
+
+install-project-job:
+  stage: build
+  script:
+    - echo "Installing project"
+    - python3 -m venv venv
+    - ls -la
+    - source venv/bin/activate
+    - pip3 install -e .
+    - pip list
+
+
+linting-project-job:
+  stage: build
+  needs:
+    - install-project-job
+  allow_failure: true
+  before_script:
+    - *activate_venv
+  script:
+    - pylint --output-format=pylint_gitlab.GitlabCodeClimateReporter --load-plugins pylint_pytest api_test > codeclimate.json
+    #- pylint --load-plugins pylint_pytest --output-format colorized --score y --reports y api_test  # colorized report only in job
+  artifacts:
+    paths:
+      - codeclimate.json
+    reports:
+      codequality: codeclimate.json
+
+run-tests-job:
+  stage: test
+  before_script:
+    - *activate_venv
+  script:
+    - pip list
+    - ls -la
+    - echo $PWD
+    - echo "Running tests"
+    - echo $AUTH_TOKEN
+    # add $AUTH_TOKEN variable to GitLab CI variables
+    #- pytest --junitxml=junit_report.xml $PYTEST_OPTIONAL_PARAMETERS api_test/tests/$TEST_PACKAGE --token="$AUTH_TOKEN"
+    - pytest --junitxml=junit_report.xml --html-report=html_report/report.html $PYTEST_OPTIONAL_PARAMETERS api_test/tests/$TEST_PACKAGE --token="$AUTH_TOKEN"
+  after_script:
+    - ls -la
+
+  artifacts:
+    paths:
+      - junit_report.xml
+      - html_report/report.html
+    when: always
+    reports:
+      junit: junit_report.xml
