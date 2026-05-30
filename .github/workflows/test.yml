@@ -24,7 +24,7 @@ jobs:
         verbose: true
         emoji: true
         job-summary: true
-        custom-arguments: '-q --token="${{ secrets.GOREST_TOKEN }}"'
+        custom-arguments: '-q --token="${{ secrets.GOREST_TOKEN }}" api_test'
         click-to-expand: true
         report-title: 'Test Report'
     #- name: Analysing the code with pylint
