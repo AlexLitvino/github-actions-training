@@ -18,6 +18,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install -e .
         pip list
+    - name: Run pytest
+      uses: pavelzw/pytest-action@v2
+      with:
+        verbose: true
+        emoji: true
+        job-summary: true
+        custom-arguments: '-q'
+        click-to-expand: true
+        report-title: 'Test Report'
     #- name: Analysing the code with pylint
     #  run: |
     #    pylint $(git ls-files '*.py')

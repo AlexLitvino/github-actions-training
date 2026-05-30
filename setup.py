@@ -10,6 +10,8 @@ setup(name='API test',
                         'pylint-gitlab',
                         'pylint-pytest',
                         'pytest-html',
-                        'pytest-html-reporter'
+                        'pytest-html-reporter',
+                        'pytest-md',  # required for running pytest on GitHub Actions
+                        'pytest-emoji',  # required for running pytest on GitHub Actions
                         ]
       )
