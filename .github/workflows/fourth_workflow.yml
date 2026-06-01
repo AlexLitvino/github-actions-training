@@ -1,0 +1,13 @@
+name: Fourth workflow
+on:
+  workflow_run:
+    workflows:
+      - Third workflow
+    types:
+      - completed
+jobs:
+  hello-command:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Hello
+        run: echo "Hello"
