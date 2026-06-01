@@ -1,4 +1,4 @@
-name: First workflow
+name: Second workflow
 on: [push]
 jobs:
   run-first-command:
