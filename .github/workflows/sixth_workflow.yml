@@ -1,4 +1,4 @@
-name: Fifth workflow
+name: Sixth workflow
 on:
   push:
     branches:
@@ -13,10 +13,6 @@ on:
       - "!v1.2.2"
     paths:
       - "**.html"
-  issues:
-    types: [edited, deleted]
-  pull_request:
-    types: [assigned, closed]
 jobs:
   run-first-command:
     runs-on: ubuntu-latest
