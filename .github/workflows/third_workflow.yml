@@ -5,7 +5,13 @@ jobs:
   run-first-command:
     runs-on: ubuntu-latest
     steps:
-      - name: Display Node version
+      - name: Display working directory
         run: |
           pwd
-          ls -l
+          ls -la
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Display working directory
+        run: |
+          pwd
+          ls -la
