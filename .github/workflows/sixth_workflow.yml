@@ -1,0 +1,27 @@
+name: Fifth workflow
+on:
+  push:
+    branches:
+      - main
+      - "page/*"  # page/contact
+      - "page/**"  # page/blog/lifestyle
+      - "!page/blog"  # exclude
+#    branches-ignore:
+#      - "page/blog"
+    tags:
+      - "v1.*"  # v1.1.1, v1.2.1
+      - "!v1.2.2"
+    paths:
+      - "**.html"
+  issues:
+    types: [edited, deleted]
+  pull_request:
+    types: [assigned, closed]
+jobs:
+  run-first-command:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Event vars
+        run: |
+          echo $GITHUB_SHA
+          echo $GITHUB_REF
