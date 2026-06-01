@@ -9,8 +9,14 @@ jobs:
         run: |
           pwd
           ls -la
-      - name: Checkout repository
-        uses: actions/checkout@v6
+#      - name: Checkout repository
+#        uses: actions/checkout@v6
+      - name: Checkout files manually
+        run: |
+          git init
+          git remote add origin "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git"
+          git fetch origin
+          git checkout main
       - name: Display working directory
         run: |
           pwd
