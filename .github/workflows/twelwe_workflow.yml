@@ -1,0 +1,11 @@
+name: Twelve workflow
+on: [push]
+
+jobs:
+  run-first-command:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Our Vars and Secrets
+        run: |
+          echo '${{ vars.TEST_STATUS }}'
+          echo '${{ secrets.TEST_PASSWORD }}'
