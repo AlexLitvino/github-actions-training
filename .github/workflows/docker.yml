@@ -19,7 +19,7 @@ jobs:
 #      options: --cpus 1
     steps:
       - name: Display Service Image
-        run: echo ${{ toJSON(job.services) }}
+        run: echo '${{ toJSON(job.services) }}'
       - name: Display Node Version
         run: |
           node -v
