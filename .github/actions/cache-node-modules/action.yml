@@ -1,0 +1,31 @@
+name: 'Install and Cache NOde Modules'
+description: 'Some description'
+inputs:
+  caching:
+    required: false
+    description: "Enable or disable caching"
+    default: 'true'
+outputs:
+  status:
+    description: 'Some status'
+    value: 'Active'
+
+runs:
+  using: composite
+  steps:
+    - name: Cache node modules
+      if: inputs.caching == 'true'
+      id: cache-step
+      uses: actions/cache@v5
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-cache-file-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-cache-file-
+          ${{ runner.os }}-
+    - name: Display cache
+      run: echo '${{ toJson(steps.cache-step.outputs) }}'
+      shell: bash
+    - name: Install node modules
+      run: npm install
+      shell: bash

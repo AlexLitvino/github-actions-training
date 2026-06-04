@@ -1,0 +1,12 @@
+name: Use Composite Action Workflow
+on: workflow_dispatch
+
+jobs:
+  first-job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: action/checkout@v4
+      - name: Use Custom Composite Action
+        uses: ./.github/actions/cache-node-modules
+        with:
+          caching: 'false'
