@@ -7,4 +7,4 @@ jobs:
       - name: Display working directory
         run: |
           pwd
-          ls -la
+          lsQQQ -la
