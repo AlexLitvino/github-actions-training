@@ -1,0 +1,10 @@
+name: Badge workflow
+on: [push]
+jobs:
+  run-first-command:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Display working directory
+        run: |
+          pwd
+          ls -la
