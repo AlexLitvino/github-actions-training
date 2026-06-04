@@ -5,7 +5,8 @@ jobs:
   test-docker-container:
     runs-on: ubuntu-latest
     container:
-      image: node:12
+      #image: node:12
+      image: node:21-alpine3.17
       env:
         NODE_ENV: development
       ports:
@@ -15,4 +16,6 @@ jobs:
 #      options: --cpus 1
     steps:
       - name: Display Node Version
-        run: node -v
+        run: |
+          node -v
+          cat /etc/os-release
