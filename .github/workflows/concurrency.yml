@@ -1,5 +1,6 @@
 name: Concurrency Testing
 on: workflow_dispatch
+concurrency: concurrency-testing
 
 jobs:
   test-timeout:
