@@ -1,0 +1,58 @@
+name: CI/CD
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git clone repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 12
+          cache: 'npm'
+
+      - name: Install Node Modules
+        run: npm i
+
+      - name: Build App
+        run: npm run prod
+
+      - name: Log files
+        run: ls -a
+
+      - name: Install lftp
+        run: sudo apt-get install lftp
+
+      - name: Copy Theme files to server
+        run: lftp -e "set ftp:ssl-allow no; set ftp:use-feat false; setssl:verify-certificate no; mirror --delete -R -P 20 ./dist/theme /wp-content/themes/starter; bye" -u ${{ secrets.USERNAME }},${{ secrets.KEY }} ${{ secrets.HOST }}
+
+      - name: Copy Plugins files to server
+        run: lftp -e "set ftp:ssl-allow no; set ftp:use-feat false; setssl:verify-certificate no; mirror --delete -R -P 20 ./dist/plugin /wp-content/plugins/ale-core; bye" -u ${{ secrets.USERNAME }},${{ secrets.KEY }} ${{ secrets.HOST }}
+
+#      - name: Copy Theme files to server using ssh by key
+#        uses: easingthemes/ssh-deploy@main
+#        env:
+#          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+#          ARGS: "-rtlgoDzv0 --delete"
+#          SOURCE: "dist/theme/"
+#          REMOTE_HOST: ${{ secrets.HOST }}
+#          REMOTE_USER: ${{ secrets.USERNAME }}
+#          TARGET: "/serverpath/public_html/wp-content/themes/starter/"
+#
+#      - name: Copy Plugin files to server using ssh by key
+#        uses: easingthemes/ssh-deploy@main
+#        env:
+#          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+#          ARGS: "-rtlgoDzv0 --delete"
+#          SOURCE: "dist/theme/"
+#          REMOTE_HOST: ${{ secrets.HOST }}
+#          REMOTE_USER: ${{ secrets.USERNAME }}
+#          TARGET: "/serverpath/public_html/wp-content/plugins/starter-core/"
